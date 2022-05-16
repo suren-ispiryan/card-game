@@ -3,6 +3,7 @@ let openedElementsData = [];
 let openedCardsCount = 0;
 let newImage = [];
 let clickingAbilityToCard = true;
+let numberOfCards;
 const images = [
     'assets/america.jpg',
     'assets/armenia.png',
@@ -22,69 +23,58 @@ const images = [
 ];
 
 window.onload = () => {
-    let numberOfCards = document.getElementById('dificulty-level').value;
     document.getElementById('start-game').addEventListener('click', createCards);
 };
 
 const  createCards = () => {
+    numberOfCards = document.getElementById('difficulty-level').value;
     // clear board
     document.getElementById('game-board').innerHTML = '';
-    numberOfCards = document.getElementById('dificulty-level').value;
-    // create card
-    const card = document.createElement('div');
     // add level and images of game
-    chooseLevel(card, numberOfCards);
+    chooseLevel(numberOfCards);
     // shuffle cards array
     arrayShuffle();
         // draw front picture
         for (let i = 0; i < numberOfCards; i++) {
-            const eachcard = document.createElement('div');
+            const eachCard = document.createElement('div');
             const img = document.createElement('img');
             const imgBackFace = document.createElement('img');
             img.classList.add('front-face');
             imgBackFace.classList.add('back-face');
-            if (+numberOfCards === 12) {
-                img.classList.add('easy');
-                eachcard.classList.add('easy');
-                imgBackFace.classList.add('easy');
+            img.classList.add('card-faces');
+            imgBackFace.classList.add('card-faces');
+            eachCard.classList.add('card-parent');
+             if (+numberOfCards === 12) {
+                eachCard.classList.add('easy');
             } else if (+numberOfCards === 20) {
-                img.classList.add('medium');
-                imgBackFace.classList.add('medium');
-                eachcard.classList.add('medium');
+                eachCard.classList.add('medium');
             } else {
-                img.classList.add('difficult');
-                imgBackFace.classList.add('difficult');
-                eachcard.classList.add('difficult');
+                eachCard.classList.add('difficult');
             }
             // create card back face
-            img.src=newImage[i];
+            img.src = newImage[i];
             // create card front face
             imgBackFace.src = 'assets/backside.jpg';
             // put inside div card faces
-            eachcard.appendChild(imgBackFace);
-            eachcard.appendChild(img);
-            eachcard.setAttribute('id', Math.random());
+            eachCard.appendChild(imgBackFace);
+            eachCard.appendChild(img);
+            eachCard.setAttribute('id', 'card-' + Math.round(Math.random() * 1000));
             // click to run cards turning function
-            eachcard.addEventListener('click',  rotateCard);
-            document.getElementById('game-board').appendChild(eachcard);
+            eachCard.addEventListener('click',  rotateCard);
+            document.getElementById('game-board').appendChild(eachCard);
         }
 }
 
-const chooseLevel = (card, numberOfCards) => {
-    let imagesCopy = [];
-    imagesCopy = [...images]
+const chooseLevel = (numberOfCards) => {
+    const imagesCopy = [...images];
     if (+numberOfCards === 12) {
-        card.classList.add('easy');
         newImage = imagesCopy.splice(0, +numberOfCards / 2);
     } else if (+numberOfCards === 20) {
-        card.classList.add('medium');
         newImage = imagesCopy.splice(0, +numberOfCards / 2);
     } else {
-        card.classList.add('difficult');
         newImage = imagesCopy.splice(0, +numberOfCards / 2);
     }
     newImage = [ ...newImage, ...newImage];
-    return newImage;
 }
 
 const arrayShuffle = () => {
@@ -100,8 +90,8 @@ const rotateCard = (event) => {
     // if two clicks have been done turn cards
     if (clickingAbilityToCard) {
         // console.log('event.currentTarget.childNodes[1]', event.currentTarget.childNodes);
-        let elementSrc = event.currentTarget.childNodes[1].src;
-        let elementId = event.currentTarget.getAttribute('id');
+        const elementSrc = event.currentTarget.childNodes[1].src;
+        const elementId = event.currentTarget.getAttribute('id');
 
         if ((arrOfOpenedElements.length === 1 && elementId === arrOfOpenedElements[0].elementId)) {
             return
@@ -143,14 +133,8 @@ const rotateCard = (event) => {
                     // user wins
                     openedElementsData = [];
                     openedCardsCount++;
-                    if (
-                        +numberOfCards === 12 &&
-                        openedCardsCount === 6 ||
-                        +numberOfCards === 20 &&
-                        openedCardsCount === 10 ||
-                        +numberOfCards === 30 &&
-                        openedCardsCount === 15
-                    ) {
+                    //todo
+                    if (+openedCardsCount === +numberOfCards / 2) {
                         alert('congratulations, you won!!!');
                         openedCardsCount = 0;
                         // restart game
@@ -159,8 +143,7 @@ const rotateCard = (event) => {
                 }
                 arrOfOpenedElements = [];
                 clickingAbilityToCard = true;
-            }, 1500)
+            }, 1500);
         }
     }
 }
-

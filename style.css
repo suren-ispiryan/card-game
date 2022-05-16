@@ -44,6 +44,15 @@
     height: 15%;
 }
 
+.card-parent {
+    position: relative;
+}
+
+.card-faces {
+    height: 100%;
+    width: 100%;
+}
+
 .front-face {
     visibility: hidden;
     cursor: pointer;
