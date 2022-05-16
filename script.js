@@ -20,9 +20,9 @@ const images = [
     'assets/spain.png',
     'assets/uk.jpg',
 ];
-let numberOfCards = document.getElementById('dificulty-level').value;
 
 window.onload = () => {
+    let numberOfCards = document.getElementById('dificulty-level').value;
     document.getElementById('start-game').addEventListener('click', createCards);
 };
 
@@ -143,7 +143,14 @@ const rotateCard = (event) => {
                     // user wins
                     openedElementsData = [];
                     openedCardsCount++;
-                    if (+numberOfCards === 12 && openedCardsCount === 6 || +numberOfCards === 20 && openedCardsCount === 10 || +numberOfCards === 30 && openedCardsCount === 15) {
+                    if (
+                        +numberOfCards === 12 &&
+                        openedCardsCount === 6 ||
+                        +numberOfCards === 20 &&
+                        openedCardsCount === 10 ||
+                        +numberOfCards === 30 &&
+                        openedCardsCount === 15
+                    ) {
                         alert('congratulations, you won!!!');
                         openedCardsCount = 0;
                         // restart game
